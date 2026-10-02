@@ -114,12 +114,20 @@ python scripts/run_example.py --config config/default.yaml \
 
 ### Evaluation
 
-Set `eval.benchmark_file` in `config/default.yaml` to the benchmark JSONL file.
-Each record contains `row_id`, `question`, and `answer`; `level` and `category`
-are optional.
+The benchmark files are not included in this code repository. To reproduce the
+paper evaluation, download the released benchmark/validation data from the
+project dataset repository and place the JSONL file at the path configured by
+`eval.benchmark_file` (the default is
+`data/benchmark/video_browsecomp.jsonl`). The `data/` directory is intentionally
+git-ignored. `--benchmark-name` is the logical benchmark name, not a JSONL path;
+use `video_browsecomp` for the default benchmark. Each record contains `row_id`,
+`question`, and `answer`; `level` and `category` are optional.
 
 ```bash
-python scripts/run_benchmark.py --config config/default.yaml --run-name evaluation
+python scripts/run_benchmark.py \
+  --benchmark-name video_browsecomp \
+  --config config/default.yaml \
+  --run-name evaluation
 ```
 
 The default configuration uses temperature 0 and a maximum of 50 agent turns.
