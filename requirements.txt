@@ -1,0 +1,4 @@
+# Run from the repository root: pip install -r requirements.txt
+# Agent, evaluation, and task synthesis; versions are defined in pyproject.toml.
+# Install the simulator and RL runtime separately (see docs/training.md).
+-e .[synthesis]

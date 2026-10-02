@@ -1,0 +1,3 @@
+# Run from the repository root: pip install -r task_generation/requirements.txt
+# Reuse the agent and synthesis dependencies defined in pyproject.toml.
+-e .[synthesis]

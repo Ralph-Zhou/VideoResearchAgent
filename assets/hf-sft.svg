@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="284" height="70" viewBox="0 0 284 70" role="img" aria-label="VideoResearchAgent-4B-SFT">
+  <rect x="0.5" y="0.5" width="283" height="69" rx="10" fill="#fffaf0" stroke="#e6d8b6"/>
+  <rect x="13" y="16" width="4" height="38" rx="2" fill="#e7b84b"/>
+  <text x="29" y="30" font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#252525">VideoResearchAgent-4B-SFT</text>
+  <text x="29" y="49" font-family="Arial, sans-serif" font-size="12" fill="#666666">Hugging Face · SFT checkpoint</text>
+</svg>

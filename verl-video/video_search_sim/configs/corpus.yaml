@@ -1,0 +1,41 @@
+output_dir: ./data/corpus
+seed: 42
+max_videos: 50000
+num_download_workers: 8
+cache_videos: true
+cache_layout: sharded_tar
+cache_dir: data/videos
+videos_per_shard: 1024
+max_shard_bytes: null
+checkpoint_every: 200
+keep_partial: false
+sources:
+- name: HuggingFaceFV/FineVideo
+  split: train
+  subset: null
+  video_field: mp4
+  source_id_field: original_video_filename
+  duration_field: duration_seconds
+  tags_field: youtube_tags
+  text_fields:
+  - json
+  subtitle_field: text_to_speech
+  scene_field: scenes
+  local_parquet_dir: null
+keyframe:
+  strategy: uniform_fps
+  fps: 1.0
+  max_frames_per_video: 32
+clip:
+  model_name: openai/clip-vit-large-patch14-336
+  device: cuda
+  flush_frames: 512
+  batch_size: 256
+  dtype: float16
+  embedding_dim: 768
+  normalize: true
+bm25:
+  backend: bm25s
+  k1: 1.5
+  b: 0.75
+  lowercase: true

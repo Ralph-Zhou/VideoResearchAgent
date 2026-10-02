@@ -1,0 +1,47 @@
+
+[workflow]
+output_dir       = "data/video_task_output"
+target_tasks     = 50        # target number of stage-3 tasks
+workers          = 4         # default intra-stage concurrency
+log_level        = "INFO"
+
+[llm]
+model_text  = "your-synthesis-model"
+model_vision = "your-synthesis-model"
+temperature  = 0.7
+max_tokens   = 2048
+timeout      = 120
+max_retries  = 3
+
+[stage1_seed_generation]
+num_seeds           = 80     # total seed entities to produce
+batch_size          = 25     # max entities returned per LLM call
+workers             = 8
+
+[stage2_graph_construction]
+graph_depth         = 3      # entity graph depth (the seed counts as 1, then graph_depth-1 hops)
+frames_per_video    = 24     # frames sampled uniformly per video
+video_duration_min  = 30     # minimum video length in seconds (filters out shorts)
+video_duration_max  = 1500   # maximum video length in seconds (filters out long documentaries)
+ytsearch_topk       = 8      # yt-dlp search results to fetch; one is chosen at random
+max_video_resolution = "360" # download resolution cap (360 suffices for captioning and saves bandwidth/storage)
+frame_caption_workers = 4    # caption sub-concurrency within one video
+graph_workers       = 2      # seed entities processed concurrently (bounded by download bandwidth)
+caption_max_chars   = 400    # per-frame caption length cap (bounds context length)
+
+[stage3_task_generation]
+workers             = 4
+max_agent_turns     = 10     # max turns per text-only search-agent verification
+oversampling_factor = 2      # oversampling factor over the entity graph
+max_qa_retries      = 5      # max retries when generating a task
+self_check          = true   # re-run a no-tool LLM self-check after obfuscation
+require_frame_evidence = true # at least one evidence item must come from video frames
+
+[search]
+provider         = "serper"
+max_results      = 5
+enable_visit     = true
+visit_timeout    = 30
+
+[yt_dlp]
+cache_dir        = "data/cache/videos_taskgen"

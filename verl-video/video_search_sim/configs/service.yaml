@@ -1,0 +1,34 @@
+corpus_dir: ./data/corpus
+clip:
+  model_name: openai/clip-vit-large-patch14-336
+  device: cuda:0
+  batch_size: 16
+  dtype: float16
+  embedding_dim: 768
+  normalize: true
+retrieval:
+  max_topk: 50
+  default_topk: 5
+  rrf_k: 60
+  bm25_candidate_pool: 100
+  dense_candidate_pool: 100
+  dense_aggregation: max
+  enable_bm25: true
+  enable_dense: true
+watch:
+  enable: true
+  max_n_frames_sparse: 16
+  max_n_frames_dense: 32
+  max_transcript_chars: 4000
+  jpeg_quality: 85
+  shard_materialise_dir: /tmp/vss_watch_service_shard_cache
+  shard_root: null
+  downloader_cache_dir: data/cache/videos
+  transcript_cache_dir: data/cache/transcripts
+  remote_download_timeout_sec: 120
+  concurrency: 64
+server:
+  host: 127.0.0.1
+  port: 8000
+  log_level: info
+  workers: 1

@@ -1,0 +1,185 @@
+tools:
+- class_name: video_search_sim.verl_tools.video_search_tool.VideoSearchTool
+  config:
+    type: native
+    retrieval_service_url: http://127.0.0.1:8000/video_search
+    topk: 10
+    timeout: 30
+    max_retries: 10
+    retry_backoff: 0.5
+    retry_backoff_max: 30.0
+    retry_timeout_step: 1.0
+    num_workers: 64
+    rate_limit: 64
+    enable_global_rate_limit: true
+  tool_schema:
+    type: function
+    function:
+      name: search_youtube
+      description: 'Search YouTube for videos matching a query. Returns a list of
+        video
+
+        metadata (title, url, duration, description). Use targeted keywords
+
+        for best results.
+
+        '
+      parameters:
+        type: object
+        properties:
+          query:
+            type: string
+            description: YouTube search query
+          max_results:
+            type: integer
+            description: Maximum number of results to return
+        required:
+        - query
+- class_name: video_search_sim.verl_tools.web_search_tool.WebSearchTool
+  config:
+    type: native
+    provider: serper
+    max_results_cap: 10
+    timeout: 60
+    num_workers: 32
+    rate_limit: 32
+    enable_global_rate_limit: true
+  tool_schema:
+    type: function
+    function:
+      name: web_search
+      description: "Run a general-web text search via Serper (organic results). Useful\
+        \ for\nbackground knowledge that the video corpus does not cover \u2014 names,\n\
+        dates, definitions. Returns a JSON object with `results`, each having\n`url`,\
+        \ `title`, `snippet`.\n"
+      parameters:
+        type: object
+        properties:
+          query:
+            type: string
+            description: Natural-language search query.
+          max_results:
+            type: integer
+            description: 'Number of results to return (1-10). Default: 5.'
+        required:
+        - query
+- class_name: video_search_sim.verl_tools.watch_video_tool.WatchVideoTool
+  config:
+    type: native
+    corpus_dir: data/corpus
+    execution_backend: remote_server
+    watch_service_url: http://127.0.0.1:8000/watch_video
+    watch_service_timeout: 240
+    enable_local_lookup: true
+    enable_remote_fallback: false
+    max_n_frames_sparse: 16
+    max_n_frames_dense: 32
+    max_transcript_chars: 4000
+    jpeg_quality: 85
+    downloader_cache_dir: data/cache/videos
+    transcript_cache_dir: data/cache/transcripts
+    num_workers: 32
+    rate_limit: 32
+    enable_global_rate_limit: true
+    remote_download_timeout_sec: 120
+    exec_timeout_sec: 240
+  tool_schema:
+    type: function
+    function:
+      name: watch_video
+      description: "Download a video and extract frames + transcript for visual analysis.\n\
+        Two modes:\n- 'sparse': Extract N evenly-spaced frames from the entire video\
+        \ plus\n  the full transcript. Use this first to get an overview.\n- 'dense':\
+        \ Extract frames at higher FPS from a specific time window\n  [start_time,\
+        \ end_time]. Use this after sparse viewing to zoom into\n  a region of interest.\n\
+        The extracted frames will be shown to you as images.\n"
+      parameters:
+        type: object
+        properties:
+          url:
+            type: string
+            description: YouTube video URL or local file path
+          mode:
+            type: string
+            description: 'Viewing mode: ''sparse'' for overview, ''dense'' for time-window
+              zoom'
+            enum:
+            - sparse
+            - dense
+          n_frames:
+            type: integer
+            description: '(sparse mode) Number of evenly-spaced frames to extract.
+              Default: 16.'
+          start_time:
+            type: number
+            description: (dense mode only) Start time in seconds
+          end_time:
+            type: number
+            description: (dense mode only) End time in seconds
+          fps:
+            type: number
+            description: '(dense mode only) Frames per second to extract. Default:
+              1.0.'
+        required:
+        - url
+        - mode
+- class_name: video_search_sim.verl_tools.visual_grounding_tool.VisualGroundingTool
+  config:
+    type: native
+    corpus_dir: data/corpus
+    enable_local_lookup: true
+    enable_remote_fallback: false
+    model_id: IDEA-Research/grounding-dino-tiny
+    device: auto
+    box_threshold: 0.35
+    text_threshold: 0.25
+    jpeg_quality: 85
+    max_frames_cap: 8
+    downloader_cache_dir: data/cache/videos
+    num_workers: 4
+    rate_limit: 4
+    enable_global_rate_limit: true
+  tool_schema:
+    type: function
+    function:
+      name: visual_grounding
+      description: 'Detect and locate specific objects in video frames using text
+
+        descriptions (powered by Grounding DINO). Use this when you need to
+
+        precisely identify, count, or locate objects, text, logos, landmarks,
+
+        or other visual elements in a video.
+
+        Input a video URL and a text prompt describing what to find (separate
+
+        multiple objects with periods, e.g. ''a red car. a person. a blue sign.'').
+
+        Returns: bounding box coordinates + confidence for each detection,
+
+        plus annotated frames with boxes drawn for visual verification.
+
+        '
+      parameters:
+        type: object
+        properties:
+          video_path:
+            type: string
+            description: Path to video file (YouTube URL that was previously watched)
+          prompt:
+            type: string
+            description: Object descriptions to detect, separated by periods. E.g.
+              'a red ribbon. a sports car. text on a sign.'
+          timestamps:
+            type: string
+            description: 'Comma-separated timestamps (seconds) to analyze, e.g.
+
+              "10.0, 25.5, 60.0". If omitted, frames are sampled uniformly.
+
+              '
+          max_frames:
+            type: integer
+            description: 'Maximum number of frames to analyze (default: 4)'
+        required:
+        - video_path
+        - prompt

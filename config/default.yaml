@@ -1,0 +1,31 @@
+llm:
+  model: your-policy-model
+  temperature: 0.0
+  max_tokens: 8192
+agent:
+  max_iterations: 50
+  scaffold_mode: standard
+  system_prompt: default_system_prompt
+  enabled_tools:
+  - search_youtube
+  - web_search
+  - watch_video
+  - visual_grounding
+  full_trajectory: false
+search:
+  text_provider: serper
+  max_results: 10
+watcher:
+  num_sparse_frames: 16
+  max_dense_frames_per_window: 32
+  dense_fps: 1.0
+  transcript_max_chars: 25000
+judger:
+  model: your-judge-model
+  temperature: 0.0
+  enable_quick_judge: false
+eval:
+  benchmark_file: data/benchmark/video_browsecomp.jsonl
+  max_workers: 4
+logging:
+  save_trajectory: true

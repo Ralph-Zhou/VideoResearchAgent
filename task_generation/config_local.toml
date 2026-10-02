@@ -1,0 +1,65 @@
+
+[workflow]
+output_dir       = "data/video_task_output_local"
+target_tasks     = 50
+workers          = 4
+log_level        = "INFO"
+
+[runtime]
+mode = "local"   # online | local
+
+[local_corpus]
+corpus_dir            = "data/corpus"
+service_url           = "http://127.0.0.1:8000/video_search"
+service_timeout       = 30
+shard_root            = ""
+shard_materialise_dir = "/tmp/vss_shard_cache"
+top_k                 = 10
+text_search_mode      = "disabled"
+
+[llm]
+model_text   = "your-synthesis-model"
+model_vision = "your-synthesis-model"
+temperature  = 0.7
+max_tokens   = 2048
+timeout      = 120
+max_retries  = 3
+
+[stage1_seed_generation]
+num_seeds  = 80
+batch_size = 25
+workers    = 8
+
+[stage2_graph_construction]
+graph_depth           = 3
+frames_per_video      = 24
+video_duration_min    = 30
+video_duration_max    = 1500
+ytsearch_topk         = 10
+max_video_resolution  = "360"   # ignored in local mode (mp4s are already on disk)
+frame_caption_workers = 4
+graph_workers         = 2
+caption_max_chars     = 400
+
+[stage3_task_generation]
+workers                = 4
+max_agent_turns        = 10
+oversampling_factor    = 2
+max_qa_retries         = 5
+self_check             = true
+require_frame_evidence = true
+
+[stage4_difficulty_enhancement]
+enabled         = true
+workers         = 4
+max_rounds      = 2
+max_agent_turns = 8
+
+[search]
+provider      = "serper"
+max_results   = 5
+enable_visit  = true
+visit_timeout = 30
+
+[yt_dlp]
+cache_dir = "data/cache/videos_taskgen"
