@@ -2,7 +2,7 @@
 
 # VideoResearchAgent
 
-[Hugging Face · SFT checkpoint](https://huggingface.co/vra-review/VideoResearchAgent-4B-SFT) | [Hugging Face · RL checkpoint](https://huggingface.co/vra-review/VideoResearchAgent-4B-RL) | [Hugging Face · Dataset](https://huggingface.co/datasets/vra-review/VideoResearchAgent-Data)
+[Paper](https://arxiv.org/abs/2610.04911) | [HuggingFace · Dataset](https://huggingface.co/datasets/vra-review/VideoResearchAgent-Data) | [HuggingFace · SFT checkpoint](https://huggingface.co/vra-review/VideoResearchAgent-4B-SFT) | [HuggingFace · RL checkpoint](https://huggingface.co/vra-review/VideoResearchAgent-4B-RL)
 
 </div>
 
@@ -44,11 +44,7 @@ to the base policy under the paper's evaluation protocol.
 
 ## Models and Data
 
-All released artifacts are hosted on the Hugging Face Hub:
-
-<a href="https://huggingface.co/vra-review/VideoResearchAgent-4B-SFT"><img src="https://img.shields.io/badge/HuggingFace-VideoResearchAgent__4B__SFT-yellow" alt="Hugging Face model · VideoResearchAgent-4B-SFT" /></a>
-<a href="https://huggingface.co/vra-review/VideoResearchAgent-4B-RL"><img src="https://img.shields.io/badge/HuggingFace-VideoResearchAgent__4B__RL-yellow" alt="Hugging Face model · VideoResearchAgent-4B-RL" /></a>
-<a href="https://huggingface.co/datasets/vra-review/VideoResearchAgent-Data"><img src="https://img.shields.io/badge/HuggingFace-VideoResearchAgent__Data-orange" alt="Hugging Face dataset · VideoResearchAgent-Data" /></a>
+All released artifacts are hosted on the Hugging Face Hub.
 
 | Resource | Size | Description |
 | --- | ---: | --- |
